@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title><%= content_for?(:title) ? yield(:title) : "Untitled" %></title>
+    <%= stylesheet_link_tag "application" %>
+    <%= javascript_include_tag :defaults %>
+    <%= csrf_meta_tag %>
+    <%= yield(:head) %>
+  </head>
+  <body>
+    <div id="container">
+      <img height="80" src="/images/logoIB.png" width="80" align="right" />
+      <h2>
+        <% if user_signed_in? %>
+          <li>
+            <%= link_to('Logout', destroy_user_session_path, :method => :delete) %>        
+          </li>
+        <% else %>
+          <li>
+            <%= link_to('Login', new_user_session_path)  %>  
+          </li>
+        <% end %>
+      
+
+      <% if user_signed_in? %>
+        Signed as <%= current_user.email %></h2>  
+      <% end %>
+      
+
+    </div>  
+    
+    <div id="container">
+      <% flash.each do |name, msg| %>
+        <%= content_tag :div, msg, :id => "flash_#{name}" %>
+      <% end %>
+      <%= content_tag :h1, yield(:title) if show_title? %>
+      <%= yield %>
+    </div>
+  </body>
+</html>
